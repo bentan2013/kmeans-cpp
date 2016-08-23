@@ -60,23 +60,45 @@ int main()
     uint32_t num_clusters = 20 > num_lines ? num_lines : 20;
 
     std::vector<kmeans_cluster<point_feature*,2>> clusters;
-    sp_clustering->processing(num_clusters, 5, 100, clusters);
+    sp_clustering->processing(num_clusters, 5, 1000, clusters);
 
-    uint32_t cluster_id = 0;
-    for (std::vector<kmeans_cluster<point_feature*, 2>>::iterator iter = clusters.begin(); iter != clusters.end(); iter++)
-    {
-      printf("cluster id:\n", cluster_id);
-      printf("///////////////////////////////////////\n");
-      uint32_t num_features = iter->get_data_count();
+
+	FILE *pf = nullptr;
+	fopen_s(&pf, "../../data/cluster.txt", "wt");
+
+	fprintf(pf, "nodeID	minX	minY	minZ	maxX	maxY	maxZ	featureCount	tolerance	isLeafNode\n");
+	if (!pf)
+	{
+		return 0;
+	}
+
+	uint32_t cluster_id = 0;
+	for (std::vector<kmeans_cluster<point_feature*, 2>>::iterator iter = clusters.begin(); iter != clusters.end(); iter++)
+	{
+		uint32_t num_features = iter->get_data_count();
+		if (num_features == 0)
+		{
+			continue;
+		}
+		double cxmin = FLT_MAX;
+		double cxmax = -FLT_MAX;
+		double cymin = FLT_MAX;
+		double cymax = -FLT_MAX;
+
       for (uint32_t i = 0; i < num_features; i++)
       {
         point_feature* feature = nullptr;
         iter->get_data_at(i, feature);
-        printf("id: %d\n", feature->id);
+		cxmin = cxmin < feature->xmin ? cxmin : feature->xmin;
+		cymin = cymin < feature->ymin ? cymin : feature->ymin;
+		cxmax = cxmax > feature->xmax ? cxmax : feature->xmax;
+		cymax = cymax > feature->ymax ? cymax : feature->ymax;
       }
+	  fprintf_s(pf, "%d\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%d\t%d\t%d\n", cluster_id, cxmin, cymin, 0.0, cxmax, cymax, 0.0, 0, 0, 0);
       cluster_id++;
     }
     fclose(f);
+	fclose(pf);
   }
   return 0;
 }
