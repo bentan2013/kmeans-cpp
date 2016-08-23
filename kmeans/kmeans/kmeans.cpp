@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include <stdint.h>
 #include <memory>
+#include <math.h>
 #include "kmeans_clustering.h"
 
 const uint32_t num_lines = 161;
@@ -11,16 +12,20 @@ const uint32_t num_lines = 161;
 class point_feature
 {
 public:
-  point_feature(double _pos[2], uint32_t _id)
+  point_feature(uint32_t _id, double _xmin, double _ymin, double _xmax, double _ymax)
   {
-    pos[0] = _pos[0];
-    pos[1] = _pos[1];
-
+    xmin = _xmin;
+    ymin = _ymin;
+    xmax = _xmax;
+    ymax = _ymax;
     id = _id;
   }
 
   uint32_t id;
-  double pos[2];
+  double xmin;
+  double ymin;
+  double xmax;
+  double ymax;
 };
 
 int main()
@@ -47,7 +52,7 @@ int main()
       pos[0] = (xmin + xmax) / 2;
       pos[1] = (ymin + ymax) / 2;
 
-      point_feature* p_feature = new point_feature(pos, id);
+      point_feature* p_feature = new point_feature(id, xmin, ymin, xmax, ymax);
       sp_clustering->insert_data(pos, p_feature);
     }
 
@@ -65,9 +70,7 @@ int main()
         iter->get_data_at(i, feature);
         printf("id: %d\n", feature->id);
       }
-
     }
-
     fclose(f);
   }
   return 0;
