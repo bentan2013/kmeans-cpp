@@ -69,6 +69,7 @@ int main()
 	fprintf(pf, "nodeID	minX	minY	minZ	maxX	maxY	maxZ	featureCount	tolerance	isLeafNode\n");
 	if (!pf)
 	{
+		fclose(f);
 		return 0;
 	}
 
@@ -99,6 +100,12 @@ int main()
     }
     fclose(f);
 	fclose(pf);
+
+	for (uint32_t i = 0; i < num_lines; i++)
+	{
+		delete feature_array[i];
+		feature_array[i] = nullptr;
+	}
   }
   return 0;
 }

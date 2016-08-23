@@ -23,6 +23,7 @@ public:
     {
       pos[i] = 0.0;
     }
+	last_cluster_id = 0;
   }
 
   static double dist(const POS_EXP & pos1, const POS_EXP & pos2);
@@ -31,6 +32,7 @@ public:
     ~ position() { ; }
 public:
   double pos[NUMDIMS];
+  uint32_t last_cluster_id;
 };
 
 POS_TEMPLATE
@@ -258,13 +260,4 @@ void KMEANS_CLUSTERING_EXP::processing(uint32_t num_clusters, double tolerance, 
     new_val = total_val;
 	num_iter++;
   }
-
-  
-
-
-
-
-
-
-
 }

@@ -151,7 +151,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="kmeans.cpp" />
-    <ClCompile Include="kmeans_clustering.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
